@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="execute xspec" default="main">
+
+    <property name="xspec.package" value="${basedir}/xspec-1.3.0.zip"/>
+    <property name="xspec.framework" value="${basedir}/xspec-framework/xspec-1.3.0"/>
+
+    <property name="project.dir" value="${basedir}/../.."/>
+    <property name="build.dir" value="${project.dir}/target"/>
+
+    <property name="xspec.dir" value="${project.dir}/src/test/xspec/schematron"/>
+    
+    <property name="catalog" value="${project.dir}/src/main/resources/catalog.xml"/>
+    
+    <property name="report.dir" value="${build.dir}/xspec-reports"/>
+
+    <property name="includes" value="**/*.xspec"/>
+    <property name="excludes" value="**/*.xspec-compiled.xspec"/>
+
+
+    <path id="xspec.file.list">
+        <fileset dir="${xspec.dir}">
+            <include name="${includes}"/>
+            <exclude name="${excludes}"/>
+        </fileset>
+    </path>
+    <path id="xspec.framework.path">
+        <pathelement path="${java.class.path}" />
+    </path>
+    
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${build.dir}/dependency/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+
+    <target name="unzip">
+        <echo message="Unzip ${xspec.package} to ${xspec.framework}/../"/>
+        <unzip src="${xspec.package}" dest="${xspec.framework}/../"/>
+    </target>
+
+    <condition property="xspec.dir.exists">
+        <available file="${xspec.dir}"/>
+    </condition>
+
+
+    <target name="main" depends="unzip" if="xspec.dir.exists">
+        <foreach target="test" param="xspec.file">
+            <path refid="xspec.file.list"/>
+        </foreach>
+    </target>
+    
+    <target name="test">
+        <basename property="xspec.file.basename" file="${xspec.file}"/>
+        <echo message="project.dir       = ${project.dir}"/>
+        <echo message="xspec.xml         = ${xspec.file}"/>
+        <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html"/>
+        <echo message="catalog           = ${catalog}"/>
+        <echo message="xspec.dir         = ${build.dir}/xspec-temp"/>
+        <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false">
+            <property name="xspec.xml" location="${xspec.file}"/>
+            <property name="test.type" value="s"/>
+            <property name="catalog" location="${catalog}"/>
+            <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
+            <property name="xspec.dir" location="${build.dir}/xspec-temp"/>
+            <property name="xspec.output.dir" location="${build.dir}/xspec-temp"/>
+            <property name="xspec.junit.enabled" location="true"/>
+        </ant>
+    </target>
+</project>
