@@ -2,7 +2,18 @@
 
 This project provides an alternative Maven Plugin to execute XSpec scripts. This plugin is just a Maven Plugin wrapper to execute the native XSpec framework by an internal ANT process. **Note:** Use this plugin only if the [main plugin](https://github.com/xspec/xspec-maven-plugin-1) does not cover your needs.
 
-Add this as minimal configuration to your `pom.xml`:
+As this is not published on Maven Central, you have do add this project as plugin repository to your `pom.xml`:
+
+```xml
+<pluginRepositories>
+    <pluginRepository>
+        <id>com.nkutsche</id>
+        <url>https://raw.github.com/nkutsche/xspec-maven-plugin/master/bin/releases/</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+Then you can add this as a minimal configuration:
 
 ```xml
 <plugin>
