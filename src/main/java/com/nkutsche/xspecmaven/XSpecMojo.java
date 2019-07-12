@@ -42,6 +42,9 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}/surefire-reports")
     public File surefireReportDir;
 
+    @Parameter(defaultValue = "${project.build.directory}/xspec-reports")
+    public File xspecReportDir;
+
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     public File mvnBuildDir;
 
@@ -206,7 +209,7 @@ public class XSpecMojo extends AbstractMojo {
         properties.setProperty(TEMP_DIR, xspecTempDir.getAbsolutePath());
         properties.setProperty(CLASS_PATH, verfiyDependencies());
 
-        properties.setProperty(REPORT_DIR, new File(workingDir, "xspec-reports").getAbsolutePath());
+        properties.setProperty(REPORT_DIR, xspecReportDir.getAbsolutePath());
 
         if(generateSurefireReport){
             properties.setProperty(GENERATE_SUREFIRE_REPORTS, "true");
