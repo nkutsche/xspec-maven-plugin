@@ -72,6 +72,21 @@
             <version>1.9.13</version>
         </dependency>
     </dependencies>
+    
+    <distributionManagement>
+        <repository>
+            <id>default</id>
+            <layout>default</layout>
+            <name>internal</name>
+            <url>${project.baseUri}/bin/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>default</id>
+            <layout>default</layout>
+            <name>internal</name>
+            <url>${project.baseUri}/bin/snappshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <plugins>
