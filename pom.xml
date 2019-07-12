@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.nkutsche</groupId>
-    <artifactId>xspec-maven</artifactId>
+    <artifactId>xspec-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
