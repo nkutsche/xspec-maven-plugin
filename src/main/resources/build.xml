@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="execute xspec" default="main">
 
-    <property name="xspec.package" value="${basedir}/xspec-1.3.0.zip"/>
-    <property name="xspec.framework" value="${basedir}/xspec-framework/xspec-1.3.0"/>
+    <property name="working.dir" value="${basedir}"/>
+    <property name="xspec.package" value="${working.dir}/xspec-1.3.0.zip"/>
+    <property name="xspec.framework" value="${working.dir}/xspec-framework/xspec-1.3.0"/>
+    <property name="temp.dir" value="${working.dir}/xspec-temp-files"/>
 
     <property name="project.dir" value="${basedir}/../.."/>
     <property name="build.dir" value="${project.dir}/target"/>
 
-    <property name="xspec.dir" value="${project.dir}/src/test/xspec/schematron"/>
-    
+    <property name="test.dir" value="${project.dir}/src/test/xspec/schematron"/>
+
+    <property name="test.type" value="s"/>
+
     <property name="catalog" value="${project.dir}/src/main/resources/catalog.xml"/>
     
     <property name="report.dir" value="${build.dir}/xspec-reports"/>
@@ -16,13 +20,18 @@
     <property name="includes" value="**/*.xspec"/>
     <property name="excludes" value="**/*.xspec-compiled.xspec"/>
 
+    <!--
+    Surefire report
+    -->
+    <property name="generateSurefireReport" value="false"/>
+    <property name="surefireReportDir" location="${build.dir}/surefire-reports"/>
+
+
 
     <path id="xspec.file.list">
-        <fileset dir="${xspec.dir}">
-            <include name="${includes}"/>
-            <exclude name="${excludes}"/>
-        </fileset>
+        <fileset dir="${test.dir}" includes="${includes}" excludes="${excludes}" erroronmissingdir="false"/>
     </path>
+
     <path id="xspec.framework.path">
         <pathelement path="${java.class.path}" />
     </path>
@@ -39,12 +48,31 @@
         <unzip src="${xspec.package}" dest="${xspec.framework}/../"/>
     </target>
 
-    <condition property="xspec.dir.exists">
-        <available file="${xspec.dir}"/>
+    <condition property="test.dir.exists">
+        <available file="${test.dir}"/>
     </condition>
 
+    <resourcecount property="test.dir.xspec.amount" refid="xspec.file.list"/>
 
-    <target name="main" depends="unzip" if="xspec.dir.exists">
+    <condition property="test.dir.no.xspecs">
+        <or>
+            <equals arg1="false" arg2="${test.dir.exists}"/>
+            <equals arg1="0" arg2="${test.dir.xspec.amount}"/>
+        </or>
+    </condition>
+
+    <target name="no.xspec.message" if="test.dir.no.xspecs">
+        <echo message="No XSpec files found in ${test.dir}!" level="warning"/>
+        <echo message="Include patterns are: ${includes}" level="warning"/>
+        <echo message="Exclude patterns are: ${excludes}" level="warning"/>
+        <echo message="${toString:xspec.file.list}" level="info"/>
+    </target>
+
+
+    <target name="main" depends="unzip, no.xspec.message" if="test.dir.exists" description="Search for XSpec files in ${test.dir}">
+        <echo message="Search for XSpec files in ${test.dir} (${test.dir.xspec.amount} XSpec files found)" level="info"/>
+        <echo message="Includes: ${includes}" level="debug"/>
+        <echo message="Excludes: ${excludes}" level="debug"/>
         <foreach target="test" param="xspec.file">
             <path refid="xspec.file.list"/>
         </foreach>
@@ -52,19 +80,29 @@
     
     <target name="test">
         <basename property="xspec.file.basename" file="${xspec.file}"/>
-        <echo message="project.dir       = ${project.dir}"/>
-        <echo message="xspec.xml         = ${xspec.file}"/>
-        <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html"/>
-        <echo message="catalog           = ${catalog}"/>
-        <echo message="xspec.dir         = ${build.dir}/xspec-temp"/>
+
+        <echo message="" level="info"/>
+        <echo message="Found XSpec file ${xspec.file}" level="info"/>
+        <echo message="" level="info"/>
+
+        <echo message="project.dir       = ${project.dir}" level="debug"/>
+        <echo message="xspec.xml         = ${xspec.file}" level="debug"/>
+        <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
+        <echo message="catalog           = ${catalog}" level="debug"/>
+        <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false">
             <property name="xspec.xml" location="${xspec.file}"/>
-            <property name="test.type" value="s"/>
+            <property name="test.type" value="${test.type}"/>
             <property name="catalog" location="${catalog}"/>
             <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
-            <property name="xspec.dir" location="${build.dir}/xspec-temp"/>
-            <property name="xspec.output.dir" location="${build.dir}/xspec-temp"/>
-            <property name="xspec.junit.enabled" location="true"/>
+            <property name="xspec.dir" location="${temp.dir}"/>
+            <property name="xspec.output.dir" location="${temp.dir}"/>
+            <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
+            <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
         </ant>
+
+        <echo message="" level="info"/>
+        <echo message="XSpec test finished. Report can be found here ${report.dir}/${xspec.file.basename}-result.html" level="info"/>
+        <echo message="" level="info"/>
     </target>
 </project>
