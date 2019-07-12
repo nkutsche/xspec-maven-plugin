@@ -8,6 +8,10 @@
     <artifactId>xspec-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
+    
+    <name>XSpec Maven Plugin</name>
+    
+    <description>This project provides an alternative Maven Plugin to execute XSpec scripts. This plugin is just a Maven Plugin wrapper to execute the native XSpec framework by an internal ANT process. Use this plugin only if the main plugin (https://github.com/xspec/xspec-maven-plugin-1) does not cover your needs.</description>
 
     <dependencies>
         <dependency>
