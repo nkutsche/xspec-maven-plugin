@@ -24,7 +24,7 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}/xspecmaven", property = "com.nkutsche.xspecmaven.workingDir")
     private File workingDir;
 
-    @Parameter(defaultValue = "${com.nkutsche.xspecmaven.workingDir}/xspec-temp-files")
+    @Parameter
     private File xspecTempDir;
 
     @Parameter(defaultValue = "${project.basedir}/src/test/xspec/schematron")
@@ -51,7 +51,7 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter(defaultValue = "false")
     public Boolean generateSurefireReport;
 
-    @Parameter(defaultValue = "${project.basedir}")
+    @Parameter(defaultValue = "${project.basedir}", readonly = true)
     private File projectBaseDir;
 
     @Parameter( defaultValue = "${project}", readonly = true, required = true )
@@ -206,6 +206,11 @@ public class XSpecMojo extends AbstractMojo {
 
         properties.setProperty(BUILD_DIR, mvnBuildDir.getAbsolutePath());
         properties.setProperty(WORKING_DIR, workingDir.getAbsolutePath());
+
+        if(xspecTempDir == null){
+            xspecTempDir = new File(workingDir, "xspec-temp-files");
+        }
+
         properties.setProperty(TEMP_DIR, xspecTempDir.getAbsolutePath());
         properties.setProperty(CLASS_PATH, verfiyDependencies());
 
