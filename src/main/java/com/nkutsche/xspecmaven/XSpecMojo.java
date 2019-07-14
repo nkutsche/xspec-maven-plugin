@@ -21,6 +21,10 @@ import static com.nkutsche.xspecmaven.AntProperties.*;
 @Mojo(name = "run", defaultPhase = LifecyclePhase.TEST)
 public class XSpecMojo extends AbstractMojo {
 
+
+    @Parameter(property = "skipTests", defaultValue = "false")
+    public boolean skipTests;
+
     @Parameter(defaultValue = "${project.build.directory}/xspecmaven", property = "com.nkutsche.xspecmaven.workingDir")
     private File workingDir;
 
@@ -67,6 +71,11 @@ public class XSpecMojo extends AbstractMojo {
     private TestType testType;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        if(skipTests){
+            getLog().info("Skipping tests...");
+            return;
+        }
 
         getLog().info("Start XSpec for Maven and Schematron");
 
