@@ -23,7 +23,7 @@ Then you can add this as a minimal configuration:
     <executions>
         <execution>
             <goals>
-                <goal>run</goal>
+                <goal>run-xspec</goal>
             </goals>
         </execution>
     </executions>
@@ -36,7 +36,7 @@ This is the default configuration:
 
 ```xml
 <configuration>
-<!--  If true, skips all test runs. Connect to Maven property ${skipTests} -->
+<!--  If true, it skips the test runs. Connect to Maven property ${skipTests} -->
     <skipTests>false</skipTests>
 <!--  Working directory for the internal ant processes  -->
     <workingDir>${project.build.directory}/xspecmaven</workingDir>

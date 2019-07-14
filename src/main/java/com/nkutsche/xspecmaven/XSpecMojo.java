@@ -18,7 +18,7 @@ import java.util.Properties;
 
 import static com.nkutsche.xspecmaven.AntProperties.*;
 
-@Mojo(name = "run", defaultPhase = LifecyclePhase.TEST)
+@Mojo(name = "run-xspec", defaultPhase = LifecyclePhase.TEST)
 public class XSpecMojo extends AbstractMojo {
 
 
