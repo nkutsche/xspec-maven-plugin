@@ -36,6 +36,8 @@ This is the default configuration:
 
 ```xml
 <configuration>
+<!--  If true, skips all test runs. Connect to Maven property ${skipTests} -->
+    <skipTests>false</skipTests>
 <!--  Working directory for the internal ant processes  -->
     <workingDir>${project.build.directory}/xspecmaven</workingDir>
 <!--  Working directory to store the temporary files of the XSpec framework  -->
