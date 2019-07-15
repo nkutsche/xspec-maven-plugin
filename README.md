@@ -19,7 +19,7 @@ Then you can add this as a minimal configuration:
 <plugin>
     <groupId>com.nkutsche</groupId>
     <artifactId>xspec-maven-plugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <executions>
         <execution>
             <goals>
