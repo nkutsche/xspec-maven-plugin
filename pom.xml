@@ -24,7 +24,9 @@
     <url>https://github.com/nkutsche/xspec-maven-plugin</url>
     
     <scm>
-        <url>https://github.com/nkutsche/xspec-maven-plugin.git</url>
+        <connection>scm:git:https://github.com/nkutsche/xspec-maven-plugin.git</connection>
+        <url>https://github.com/nkutsche/xspec-maven-plugin</url>
+        <developerConnection>scm:git:https://github.com/nkutsche/xspec-maven-plugin.git</developerConnection>
     </scm>
     
     <dependencies>
@@ -112,6 +114,15 @@
                     <mojoDependencies>
                         <param>com.nkutsche:xspec-maven</param>
                     </mojoDependencies>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <tagNameFormat>releases/v@{project.version}</tagNameFormat>
+                    <preparationGoals>clean deploy</preparationGoals>
                 </configuration>
             </plugin>
         </plugins>
