@@ -132,7 +132,7 @@
                         <artifactId>maven-scm-plugin</artifactId>
                         <configuration>
                             <message>[maven-release-plugin] Release version ${project.version}</message>
-                            <includes>pom.xml,bin/releases/**</includes>
+                            <includes>pom.xml,README.md,bin/releases/**</includes>
                             <pushChanges>false</pushChanges>
                         </configuration>
                         <executions>
