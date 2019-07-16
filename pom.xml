@@ -116,6 +116,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>releases/v@{project.version}</tagNameFormat>
                     <preparationGoals>clean deploy -P release</preparationGoals>
+                    <completionGoals>clean process-resources -P release-completion</completionGoals>
                 </configuration>
             </plugin>
             
@@ -141,6 +142,114 @@
                                     <goal>checkin</goal>
                                 </goals>
                                 <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>readme-md-bak</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}/bak</outputDirectory>
+                                    <resources>                                        
+                                        <resource>
+                                            <directory>${project.basedir}</directory>
+                                            <includes>
+                                                <include>README.md</include>
+                                            </includes>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                    <encoding>UTF-8</encoding>
+                                </configuration>            
+                            </execution>
+                            <execution>
+                                <id>readme-md</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                    <resources>                                        
+                                        <resource>
+                                            <directory>${project.basedir}/bak</directory>
+                                            <includes>
+                                                <include>README.md</include>
+                                            </includes>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                    <encoding>UTF-8</encoding>
+                                    <overwrite>true</overwrite>
+                                </configuration>            
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                
+            </build>
+        </profile>
+        <profile>
+            <id>release-completion</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>readme-md-revert</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                    <resources>                                        
+                                        <resource>
+                                            <directory>${project.basedir}/bak</directory>
+                                            <includes>
+                                                <include>README.md</include>
+                                            </includes>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                    <encoding>UTF-8</encoding>
+                                    <overwrite>true</overwrite>
+                                </configuration>            
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>custom-cleanup</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${project.basedir}/bak</directory>
+                                            <includes>
+                                                <include>README.md</include>
+                                            </includes>
+                                            <followSymlinks>false</followSymlinks>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
