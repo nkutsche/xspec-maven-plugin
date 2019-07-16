@@ -19,7 +19,7 @@ Then you can add this as a minimal configuration:
 <plugin>
     <groupId>com.nkutsche</groupId>
     <artifactId>xspec-maven-plugin</artifactId>
-    <version>${project.version}</version>
+    <version>1.0.1</version>
     <executions>
         <execution>
             <goals>
@@ -36,14 +36,14 @@ This is the default configuration:
 
 ```xml
 <configuration>
-<!--  If true, it skips the test runs. Connect to Maven property \${skipTests} -->
+<!--  If true, it skips the test runs. Connect to Maven property ${skipTests} -->
     <skipTests>false</skipTests>
 <!--  Working directory for the internal ant processes  -->
-    <workingDir>\${project.build.directory}/xspecmaven</workingDir>
+    <workingDir>${project.build.directory}/xspecmaven</workingDir>
 <!--  Working directory to store the temporary files of the XSpec framework  -->
-    <xspecTempDir>\${project.build.directory}/xspecmaven/xspec-temp-files</xspecTempDir>
+    <xspecTempDir>${project.build.directory}/xspecmaven/xspec-temp-files</xspecTempDir>
 <!--  Directory to search for XSpec files  -->
-    <testDir>\${project.basedir}/src/test/xspec/schematron</testDir>
+    <testDir>${project.basedir}/src/test/xspec/schematron</testDir>
 <!--  Whitelist patterns to search for XSpec files in {testDir}  -->
     <includes>
         <include>*.xspec</include>
@@ -53,11 +53,11 @@ This is the default configuration:
         <exclude>**/*.xspec-compiled.xspec</exclude>
     </excludes>
 <!--  Catalog file to resolve URLs -->
-    <catalogFile>\${catalog.filename}</catalogFile>
+    <catalogFile>${catalog.filename}</catalogFile>
 <!--  Directory for generating surefire reports (Only if {generateSurefireReport} == true!) -->
-    <surefireReportDir>\${project.build.directory}/surefire-reports</surefireReportDir>
+    <surefireReportDir>${project.build.directory}/surefire-reports</surefireReportDir>
 <!--  Directory to generate the XSpec reports -->
-    <xspecReportDir>\${project.build.directory}/xspec-reports</xspecReportDir>
+    <xspecReportDir>${project.build.directory}/xspec-reports</xspecReportDir>
 <!--  Boolean value to generate surefire reports -->
     <generateSurefireReport>false</generateSurefireReport>
 <!--  Type of XSPec tests - posible values are: SCHEMATRON, XSLT, XQUERY -->
