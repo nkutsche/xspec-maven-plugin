@@ -1,5 +1,12 @@
 package com.nkutsche.xspecmaven;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
+import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
+import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -14,7 +21,7 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Properties;
+import java.util.*;
 
 import static com.nkutsche.xspecmaven.AntProperties.*;
 
@@ -83,9 +90,12 @@ public class XSpecMojo extends AbstractMojo {
 
 
         try {
-            Properties antProperties = extractResources(initProperties());
+            Properties antProperties = new Properties();
 
 
+            antProperties = detectXSpecFramework(antProperties);
+            antProperties = initProperties(antProperties);
+            antProperties = extractResources(antProperties);
             Project p = new Project();
             p.addBuildListener(new BuildListener() {
                 public void buildStarted(BuildEvent buildEvent) {
@@ -179,8 +189,66 @@ public class XSpecMojo extends AbstractMojo {
         return classPath;
     }
 
-    private Properties initProperties() throws MojoExecutionException {
-        Properties properties = new Properties();
+    private void printXSpecDependencyUsage(){
+        getLog().error("Use:");
+        getLog().error("<dependency>");
+        getLog().error("    <groupId>io.xspec</groupId>");
+        getLog().error("    <artifactId>xspec</artifactId>");
+        getLog().error("    <version>{xspec.version}</version>");
+        getLog().error("    <classifier>enduser-files</classifier>");
+        getLog().error("    <type>zip</type>");
+        getLog().error("</dependency>");
+    }
+
+    private Properties detectXSpecFramework(Properties properties) throws MojoExecutionException {
+
+        File xspecPackageFile = new File(workingDir, "xspec-1.6.0.zip");
+        String xspecVersion = "1.6.0";
+
+        Map<String, Artifact> arficactMap = this.pluginDescriptor.getArtifactMap();
+
+        if (arficactMap.containsKey("io.xspec:xspec")) {
+            Artifact xspecArtifact = arficactMap.get("io.xspec:xspec");
+            VersionRange verrang = xspecArtifact.getVersionRange();
+            try {
+                ArtifactVersion xspecArtVersion = xspecArtifact.getSelectedVersion();
+
+                if (VersionRange.createFromVersionSpec("[2.0,)").containsVersion(xspecArtVersion)) {
+                    if (!"enduser-files".equals(xspecArtifact.getClassifier())) {
+                        getLog().error("Unsupported XSpec Classifier: " + xspecArtifact.getClassifier());
+                        printXSpecDependencyUsage();
+                        throw new MojoExecutionException("Unsupported XSpec Classifier: " + xspecArtifact.getClassifier());
+                    } else if (!"zip".equals(xspecArtifact.getType())) {
+                        getLog().error("Unsupported XSpec Artifact Type: " + xspecArtifact.getType());
+                        printXSpecDependencyUsage();
+                        throw new MojoExecutionException("Unsupported XSpec Classifier: " + xspecArtifact.getType());
+                    } else {
+                        xspecPackageFile =  xspecArtifact.getFile();
+                        xspecVersion = xspecArtVersion.toString();
+                    }
+
+                } else if (VersionRange.createFromVersionSpec("(,1.5]").containsVersion(xspecArtVersion)) {
+                    throw new MojoFailureException("Unsupported XSpec version: " + xspecVersion.toString());
+                }
+
+            } catch (OverConstrainedVersionException | InvalidVersionSpecificationException e) {
+                throw new MojoExecutionException(e.getMessage());
+            } catch (MojoFailureException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        properties.setProperty(XSPEC_PACKAGE, xspecPackageFile.getAbsolutePath());
+
+        properties.setProperty(XSPEC_FRAMEWORK, new File(workingDir, "xspec-framework/xspec-" + xspecVersion).getAbsolutePath());
+
+
+        return properties;
+
+    }
+    private Properties initProperties(Properties properties) throws MojoExecutionException {
+
 
 
         properties.setProperty(PROJECT_DIR, projectBaseDir.getAbsolutePath());
@@ -209,9 +277,7 @@ public class XSpecMojo extends AbstractMojo {
 
 
         properties.setProperty(ANT_FILE, new File(workingDir, "build.xml").getAbsolutePath());
-        properties.setProperty(XSPEC_PACKAGE, new File(workingDir, "xspec-1.3.0.zip").getAbsolutePath());
 
-        properties.setProperty(XSPEC_FRAMEWORK, new File(workingDir, "xspec-framework/xspec-1.3.0").getAbsolutePath());
 
         properties.setProperty(BUILD_DIR, mvnBuildDir.getAbsolutePath());
         properties.setProperty(WORKING_DIR, workingDir.getAbsolutePath());
@@ -243,7 +309,11 @@ public class XSpecMojo extends AbstractMojo {
         getLog().debug("Created temp folder successfully!");
 
         extractResources("/build.xml", new File(properties.getProperty(ANT_FILE)));
-        extractResources("/xspec-1.3.0.zip", new File(properties.getProperty(XSPEC_PACKAGE)));
+
+        File xspecPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
+        if(!xspecPackageFile.exists()){
+            extractResources("/xspec-1.6.0.zip", xspecPackageFile);
+        }
 
         return properties;
 
