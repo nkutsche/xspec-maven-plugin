@@ -71,8 +71,8 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter( defaultValue = "${plugin}", readonly = true )
     private PluginDescriptor pluginDescriptor;
 
-    @Parameter
-    private Properties xspecProperties;
+    @Parameter( defaultValue = "")
+    private Properties xspecProperties = new Properties();
 
     @Parameter(defaultValue = "true")
     public Boolean addDependenciesToClasspath;
