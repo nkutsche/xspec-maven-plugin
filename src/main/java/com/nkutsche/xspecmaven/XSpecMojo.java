@@ -95,6 +95,7 @@ public class XSpecMojo extends AbstractMojo {
 
 
             antProperties = detectXSpecFramework(antProperties);
+            antProperties = detectSchXslt(antProperties);
             antProperties = initProperties(antProperties);
             antProperties = extractResources(antProperties);
 
@@ -227,6 +228,21 @@ public class XSpecMojo extends AbstractMojo {
         return classPath;
     }
 
+    private Properties detectSchXslt(Properties properties) throws MojoExecutionException {
+        File schxsltPackageFile = new File(workingDir, "schxslt-1.5.2.jar");
+        Map<String, Artifact> arficactMap = this.pluginDescriptor.getArtifactMap();
+        if (arficactMap.containsKey("name.dmaus.schxslt:schxslt")) {
+            Artifact schxsltArtifact = arficactMap.get("name.dmaus.schxslt:schxslt");
+
+            schxsltPackageFile =  schxsltArtifact.getFile();
+
+        }
+
+        properties.setProperty(SCHXSLT_PACKAGE, schxsltPackageFile.getAbsolutePath());
+
+        return properties;
+    }
+
     private void printXSpecDependencyUsage(){
         getLog().error("Use:");
         getLog().error("<dependency>");
@@ -298,6 +314,7 @@ public class XSpecMojo extends AbstractMojo {
 
         properties.setProperty(ANT_FILE, new File(workingDir, "build.xml").getAbsolutePath());
 
+        properties.setProperty(SCHXSLT_ROOT, new File(workingDir, "schxslt").getAbsolutePath());
 
         properties.setProperty(BUILD_DIR, mvnBuildDir.getAbsolutePath());
         properties.setProperty(WORKING_DIR, workingDir.getAbsolutePath());
@@ -336,6 +353,11 @@ public class XSpecMojo extends AbstractMojo {
         File xspecPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
         if(!xspecPackageFile.exists()){
             extractResources("/xspec-1.6.0.zip", xspecPackageFile);
+        }
+
+        File schxsltPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
+        if(!schxsltPackageFile.exists()){
+            extractResources("/schxslt-1.5.2.jar", new File(properties.getProperty(SCHXSLT_PACKAGE)));
         }
 
         return properties;

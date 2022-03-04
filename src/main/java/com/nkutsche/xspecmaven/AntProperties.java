@@ -15,6 +15,8 @@ public interface AntProperties {
     //    PROCESS FILES
     String ANT_FILE = "ant.file";
     String XSPEC_PACKAGE = "xspec.package";
+    String SCHXSLT_PACKAGE = "schxslt.package";
+    String SCHXSLT_ROOT = "schxslt.root";
     String XSPEC_FRAMEWORK = "xspec.framework";
     String BUILD_DIR = "build.dir";
     String WORKING_DIR = "working.dir";
