@@ -90,15 +90,17 @@
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
         <echo message="catalog           = ${catalog}" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
-        <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false">
-            <property name="xspec.xml" location="${xspec.file}"/>
-            <property name="test.type" value="${test.type}"/>
-            <property name="catalog" location="${catalog}"/>
-            <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
-            <property name="xspec.dir" location="${temp.dir}"/>
-            <property name="xspec.output.dir" location="${temp.dir}"/>
-            <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
-            <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
+        
+        
+        <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
+            <property name="xspec.framework" value="${xspec.framework}"/>
+            <property name="xspec.file" value="${xspec.file}"/>
+            <property name="report.dir" value="${report.dir}"/>
+            <property name="xspec.file.basename" value="${xspec.file.basename}"/>
+            <property name="temp.dir" value="${temp.dir}"/>
+            <property name="generateSurefireReport" value="${generateSurefireReport}"/>
+            <property name="surefireReportDir" value="${surefireReportDir}"/>
+            <property name="xspec.properties" value="${xspec.properties}"/>
         </ant>
 
         <echo message="" level="info"/>

@@ -38,7 +38,7 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter
     private File xspecTempDir;
 
-    @Parameter(defaultValue = "${project.basedir}/src/test/xspec/schematron")
+    @Parameter(defaultValue = "${project.basedir}/src/test/xspec")
     private File testDir;
 
     @Parameter(defaultValue = "**/*.xspec")
@@ -71,11 +71,6 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter( defaultValue = "${plugin}", readonly = true )
     private PluginDescriptor pluginDescriptor;
 
-    private enum TestType {
-        SCHEMATRON, XSLT, XQUERY
-    }
-    @Parameter(defaultValue = "SCHEMATRON")
-    private TestType testType;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -260,22 +255,6 @@ public class XSpecMojo extends AbstractMojo {
 
         properties.setProperty(EXCLUDES, filelistToString(this.excludes));
 
-        String testTypeValue;
-        switch (testType){
-            case XSLT:
-                testTypeValue = "t";
-                break;
-            case XQUERY:
-                testTypeValue = "q";
-                break;
-            case SCHEMATRON:
-            default:
-                testTypeValue = "s";
-                break;
-        }
-        properties.setProperty(TEST_TYPE, testTypeValue);
-
-
         properties.setProperty(ANT_FILE, new File(workingDir, "build.xml").getAbsolutePath());
 
 
@@ -309,6 +288,8 @@ public class XSpecMojo extends AbstractMojo {
         getLog().debug("Created temp folder successfully!");
 
         extractResources("/build.xml", new File(properties.getProperty(ANT_FILE)));
+        extractResources("/xspec-wrapper.xml", new File(workingDir, "xspec-wrapper.xml"));
+        extractResources("/test-type.xsl", new File(workingDir, "test-type.xsl"));
 
         File xspecPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
         if(!xspecPackageFile.exists()){

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="XSpec Wrapper" default="xspec-wrapper">
+    
+    <macrodef name="xml-to-properties">
+        <attribute name="in" />
+        <attribute name="style" />
+        <attribute name="tempdir" />
+        
+        <sequential>
+            <basename property="in.basename" file="@{in}"/>
+            <property name="xspec.xml-to-properties.temp"
+                value="${basedir}/temp/${in.basename}-xml-to-prop.xml" />
+            
+            <xslt in="@{in}"
+                out="${xspec.xml-to-properties.temp}"
+                style="${basedir}/@{style}" />
+            
+            <xmlproperty file="${xspec.xml-to-properties.temp}" />
+        </sequential>
+    </macrodef>
+    
+    <target name="xspec-wrapper">
+        <xml-to-properties in="${xspec.file}" style="test-type.xsl" tempdir="${temp.dir}" />
+        
+        <echo message="Start XSpec process for ${xspec.file}" level="info"/>
+        
+        <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false">
+            <property name="xspec.xml" location="${xspec.file}"/>
+            <property name="test.type" value="${test.type}"/>
+            <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
+            <property name="xspec.dir" location="${temp.dir}"/>
+            <property name="xspec.output.dir" location="${temp.dir}"/>
+            <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
+            <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
+            <property file="${xspec.properties}"/>
+        </ant>
+        
+    </target>
+  
+</project>
