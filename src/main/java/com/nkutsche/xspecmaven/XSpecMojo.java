@@ -71,6 +71,10 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter( defaultValue = "${plugin}", readonly = true )
     private PluginDescriptor pluginDescriptor;
 
+    @Parameter
+    private Properties xspecProperties;
+
+
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -91,6 +95,9 @@ public class XSpecMojo extends AbstractMojo {
             antProperties = detectXSpecFramework(antProperties);
             antProperties = initProperties(antProperties);
             antProperties = extractResources(antProperties);
+
+            antProperties = xspecProperties(antProperties);
+
             Project p = new Project();
             p.addBuildListener(new BuildListener() {
                 public void buildStarted(BuildEvent buildEvent) {
@@ -147,12 +154,24 @@ public class XSpecMojo extends AbstractMojo {
 
             getLog().info("Start nested ANT process...");
             p.executeTarget(p.getDefaultTarget());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new MojoExecutionException("Execution failed because of a fatal error", e);
         }
     }
 
+    private Properties xspecProperties(Properties antProperties) throws IOException, DependencyResolutionRequiredException {
+
+        File propFile = new File(antProperties.getProperty(XSPEC_PROPERTIES));
+
+        if(catalogFile != null) {
+            this.xspecProperties.setProperty("catalog", catalogFile.getAbsolutePath());
+        }
+
+        this.xspecProperties.store(new FileOutputStream(propFile), null);
+
+        return antProperties;
+    }
     private Project addPropertiesToAntProject(Project project, Properties properties){
 
         for (Object keyObj:
@@ -260,6 +279,7 @@ public class XSpecMojo extends AbstractMojo {
 
         properties.setProperty(BUILD_DIR, mvnBuildDir.getAbsolutePath());
         properties.setProperty(WORKING_DIR, workingDir.getAbsolutePath());
+        properties.setProperty(XSPEC_PROPERTIES, new File(workingDir, "xspec.properties").getAbsolutePath());
 
         if(xspecTempDir == null){
             xspecTempDir = new File(workingDir, "xspec-temp-files");

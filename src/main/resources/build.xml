@@ -25,6 +25,8 @@
     -->
     <property name="generateSurefireReport" value="false"/>
     <property name="surefireReportDir" location="${build.dir}/surefire-reports"/>
+    
+    <property name="xspec.properties" value="${working.dir}/xspec.properties"/>
 
 
 
