@@ -80,14 +80,14 @@ public class XSpecMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
+
+
         if(skipTests){
             getLog().info("Skipping tests...");
             return;
         }
 
         getLog().info("Start XSpec for Maven and Schematron");
-
-
 
 
         try {

@@ -80,12 +80,15 @@
     
     <target name="test">
         <basename property="xspec.file.basename" file="${xspec.file}"/>
+        
+        
 
         <echo message="" level="info"/>
         <echo message="Found XSpec file ${xspec.file}" level="info"/>
         <echo message="" level="info"/>
 
         <echo message="project.dir       = ${project.dir}" level="debug"/>
+        <echo message="xspec.framework   = ${xspec.framework}" level="debug"/>
         <echo message="xspec.xml         = ${xspec.file}" level="debug"/>
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
@@ -101,9 +104,13 @@
             <property name="surefireReportDir" value="${surefireReportDir}"/>
             <property name="xspec.properties" value="${xspec.properties}"/>
         </ant>
+        
 
         <echo message="" level="info"/>
         <echo message="XSpec test finished. Report can be found here ${report.dir}/${xspec.file.basename}-result.html" level="info"/>
         <echo message="" level="info"/>
     </target>
+    
+    
+    
 </project>
