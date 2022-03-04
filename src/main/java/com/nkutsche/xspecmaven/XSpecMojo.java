@@ -87,7 +87,7 @@ public class XSpecMojo extends AbstractMojo {
             return;
         }
 
-        getLog().info("Start XSpec for Maven and Schematron");
+        getLog().info("Start XSpec on Maven");
 
 
         try {

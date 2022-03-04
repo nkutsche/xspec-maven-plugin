@@ -43,10 +43,10 @@ This is the default configuration:
 <!--  Working directory to store the temporary files of the XSpec framework  -->
     <xspecTempDir>${project.build.directory}/xspecmaven/xspec-temp-files</xspecTempDir>
 <!--  Directory to search for XSpec files  -->
-    <testDir>${project.basedir}/src/test/xspec/schematron</testDir>
+    <testDir>${project.basedir}/src/test/xspec</testDir>
 <!--  Whitelist patterns to search for XSpec files in {testDir}  -->
     <includes>
-        <include>*.xspec</include>
+        <include>**/*.xspec</include>
     </includes>
 <!--  Blacklist patterns to exclude files from search for XSpec files in {testDir}  -->
     <excludes>
@@ -60,8 +60,16 @@ This is the default configuration:
     <xspecReportDir>${project.build.directory}/xspec-reports</xspecReportDir>
 <!--  Boolean value to generate surefire reports -->
     <generateSurefireReport>false</generateSurefireReport>
-<!--  Type of XSPec tests - posible values are: SCHEMATRON, XSLT, XQUERY -->
-    <testType>SCHEMATRON</testType>
+    
+<!--  A list of properties which is passed to the XSpec ant process, see  https://github.com/xspec/xspec/wiki/Running-with-Ant#ant-properties
+    Note: use this carefully. In the most cases the properties should be set by the plugin.
+-->
+    <xspecProperties>
+        <!-- <saxon.custom.options>...</saxon.custom.options> -->
+    </xspecProperties>   
+    
+<!--  Adds the project and dependency artifacts to the XSpec framework (e.g. to enable extension functions) -->
+    <addDependenciesToClasspath>true</addDependenciesToClasspath>    
 </configuration>
 ```
 
