@@ -2,6 +2,31 @@
 
 This project provides an alternative Maven Plugin to execute XSpec scripts. This plugin is just a Maven Plugin wrapper to execute the native XSpec framework by an internal ANT process. **Note:** Use this plugin only if the [main plugin](https://github.com/xspec/xspec-maven-plugin-1) does not cover your needs.
 
+## Release notes
+
+### 2.0.0
+
+* Update of used XSpec framework to v1.6.0 - and use it as fallback only.
+* Added the possibility to use newer XSpec framework versions (2.0.7+).
+* Detects XSpec test type (xslt, schematron, xquery) automatically per each XSpec file.
+* Configuration extensions:
+    * Added possibility to specify properties for the XSpec Ant call (`<xspecProperties>`).
+    * Added project runtime classpath as `xspec.additional.classpath` (`<addDependenciesToClasspath>`)
+    * Removed `<testType>` as it is detected now directly from the XSpec file.
+* Handling of catalog fixed.
+
+### 1.0.1
+
+* Minor fixes of Readme handling
+* Fixes Release procedure
+
+### 1.0.0
+
+* First public release
+
+
+## Usage
+
 As this is not published on Maven Central, you have do add this project as plugin repository to your `pom.xml`:
 
 ```xml
@@ -30,7 +55,25 @@ Then you can add this as a minimal configuration:
 </plugin>
 ```
 
-## Plugin configuration
+### XSpec Version
+
+By default this plugin uses XSpec 1.6.0. To use a newer version you can add it as a plugin dependency:
+
+```xml
+<dependency>
+    <groupId>io.xspec</groupId>
+    <artifactId>xspec</artifactId>
+    <version>{xspec.version}</version>
+    <classifier>enduser-files</classifier>
+    <type>zip</type>
+</dependency>
+```
+
+
+Please make sure you use the classifier `enduser-files` and as type `zip`! Supported are XSpec v2.0.7+. 
+
+
+### Plugin configuration
 
 This is the default configuration:
 
@@ -72,4 +115,5 @@ This is the default configuration:
     <addDependenciesToClasspath>true</addDependenciesToClasspath>    
 </configuration>
 ```
+
 
