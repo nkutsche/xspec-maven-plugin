@@ -13,8 +13,6 @@
 
     <property name="test.type" value="s"/>
 
-    <property name="catalog" value="${project.dir}/src/main/resources/catalog.xml"/>
-    
     <property name="report.dir" value="${build.dir}/xspec-reports"/>
 
     <property name="includes" value="**/*.xspec"/>
@@ -90,7 +88,6 @@
         <echo message="project.dir       = ${project.dir}" level="debug"/>
         <echo message="xspec.xml         = ${xspec.file}" level="debug"/>
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
-        <echo message="catalog           = ${catalog}" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         
         

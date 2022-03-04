@@ -5,7 +5,6 @@ public interface AntProperties {
     //    SOURCE
     String PROJECT_DIR = "project.dir";
     String TEST_DIR = "test.dir";
-    String CATALOG = "catalog";
     String INCLUDES = "includes";
     String EXCLUDES = "excludes";
 

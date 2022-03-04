@@ -291,8 +291,6 @@ public class XSpecMojo extends AbstractMojo {
 
         properties.setProperty(PROJECT_DIR, projectBaseDir.getAbsolutePath());
         properties.setProperty(TEST_DIR, testDir.getAbsolutePath());
-        if(catalogFile != null)
-            properties.setProperty(CATALOG, catalogFile.getAbsolutePath());
 
         properties.setProperty(INCLUDES, filelistToString(this.includes));
 
