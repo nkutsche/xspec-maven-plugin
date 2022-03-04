@@ -27,6 +27,11 @@
         <developerConnection>scm:git:https://github.com/nkutsche/xspec-maven-plugin.git</developerConnection>
       <tag>HEAD</tag>
   </scm>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
     
     <dependencies>
         <dependency>
