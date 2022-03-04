@@ -74,6 +74,8 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter
     private Properties xspecProperties;
 
+    @Parameter(defaultValue = "true")
+    public Boolean addDependenciesToClasspath;
 
 
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -164,6 +166,12 @@ public class XSpecMojo extends AbstractMojo {
 
         File propFile = new File(antProperties.getProperty(XSPEC_PROPERTIES));
 
+        if(addDependenciesToClasspath){
+            String addClasspath = xspecProperties.getProperty("xspec.additional.classpath", "");
+            addClasspath = createDependencyClasspath(addClasspath);
+            this.xspecProperties.setProperty("xspec.additional.classpath", addClasspath);
+        }
+
         if(catalogFile != null) {
             this.xspecProperties.setProperty("catalog", catalogFile.getAbsolutePath());
         }
@@ -172,6 +180,22 @@ public class XSpecMojo extends AbstractMojo {
 
         return antProperties;
     }
+
+    private String createDependencyClasspath(String path) throws DependencyResolutionRequiredException {
+        Set<Artifact> artifacts = this.project.getDependencyArtifacts();
+
+        for(String complClass : this.project.getRuntimeClasspathElements()){
+            path += File.pathSeparator + complClass;
+        }
+
+        for (Artifact artifact:
+             artifacts) {
+            path += File.pathSeparator + artifact.getFile();
+        }
+        return path;
+    }
+
+
     private Project addPropertiesToAntProject(Project project, Properties properties){
 
         for (Object keyObj:
