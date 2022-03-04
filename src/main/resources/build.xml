@@ -44,7 +44,7 @@
 
 
     <target name="unzip">
-        <echo message="Unzip ${xspec.package} to ${xspec.framework}/../"/>
+        <echo message="Unzip ${xspec.package} to ${xspec.framework}/../" level="info"/>
         <unzip src="${xspec.package}" dest="${xspec.framework}/../"/>
     </target>
 
