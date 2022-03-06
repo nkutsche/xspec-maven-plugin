@@ -4,7 +4,6 @@
     <property name="working.dir" value="${basedir}"/>
     <property name="xspec.package" value="${working.dir}/xspec-1.3.0.zip"/>
     <property name="xspec.framework" value="${working.dir}/xspec-framework/xspec-1.3.0"/>
-    <property name="schxslt.package" value="${working.dir}/schxslt-1.5.2.jar"/>
     <property name="schxslt.root" value="${working.dir}/schxslt"/>
 
     <property name="temp.dir" value="${working.dir}/xspec-temp-files"/>
@@ -45,12 +44,15 @@
         </classpath>
     </taskdef>
 
-
-    <target name="unzip">
-        <echo message="Unzip ${xspec.package} to ${xspec.framework}/../" level="info"/>
-        <unzip src="${xspec.package}" dest="${xspec.framework}/../"/>
+    
+    <target name="unzip.schxslt" if="schxslt.package">
         <echo message="Unzip ${schxslt.package} to ${schxslt.root}/"/>
         <unzip src="${schxslt.package}" dest="${schxslt.root}/"/>
+    </target>
+
+    <target name="unzip" depends="unzip.schxslt">
+        <echo message="Unzip ${xspec.package} to ${xspec.framework}/../" level="info"/>
+        <unzip src="${xspec.package}" dest="${xspec.framework}/../"/>
     </target>
 
     <condition property="test.dir.exists">
