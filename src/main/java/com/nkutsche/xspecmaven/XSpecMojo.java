@@ -229,16 +229,15 @@ public class XSpecMojo extends AbstractMojo {
     }
 
     private Properties detectSchXslt(Properties properties) throws MojoExecutionException {
-        File schxsltPackageFile = new File(workingDir, "schxslt-1.5.2.jar");
         Map<String, Artifact> arficactMap = this.pluginDescriptor.getArtifactMap();
         if (arficactMap.containsKey("name.dmaus.schxslt:schxslt")) {
             Artifact schxsltArtifact = arficactMap.get("name.dmaus.schxslt:schxslt");
 
-            schxsltPackageFile =  schxsltArtifact.getFile();
+            File schxsltPackageFile =  schxsltArtifact.getFile();
 
+            properties.setProperty(SCHXSLT_PACKAGE, schxsltPackageFile.getAbsolutePath());
         }
 
-        properties.setProperty(SCHXSLT_PACKAGE, schxsltPackageFile.getAbsolutePath());
 
         return properties;
     }
@@ -353,11 +352,6 @@ public class XSpecMojo extends AbstractMojo {
         File xspecPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
         if(!xspecPackageFile.exists()){
             extractResources("/xspec-1.6.0.zip", xspecPackageFile);
-        }
-
-        File schxsltPackageFile = new File(properties.getProperty(XSPEC_PACKAGE));
-        if(!schxsltPackageFile.exists()){
-            extractResources("/schxslt-1.5.2.jar", new File(properties.getProperty(SCHXSLT_PACKAGE)));
         }
 
         return properties;
