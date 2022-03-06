@@ -94,9 +94,9 @@ public class XSpecMojo extends AbstractMojo {
             Properties antProperties = new Properties();
 
 
+            antProperties = initProperties(antProperties);
             antProperties = detectXSpecFramework(antProperties);
             antProperties = detectSchXslt(antProperties);
-            antProperties = initProperties(antProperties);
             antProperties = extractResources(antProperties);
 
             antProperties = xspecProperties(antProperties);
@@ -228,6 +228,19 @@ public class XSpecMojo extends AbstractMojo {
         return classPath;
     }
 
+    private void addFileToXspecProperties(String key, File schxsltRoot){
+        xspecProperties.setProperty(key, schxsltRoot.getAbsolutePath());
+    }
+    private void addSchXsltToXspecProperties(File schxsl2Dir){
+        addFileToXspecProperties("xspec.schematron.preprocessor.step1",
+                new File(schxsl2Dir, "include.xsl"));
+        addFileToXspecProperties("xspec.schematron.preprocessor.step2",
+                new File(schxsl2Dir, "expand.xsl"));
+        addFileToXspecProperties("xspec.schematron.preprocessor.step3",
+                new File(schxsl2Dir, "compile-for-svrl.xsl"));
+
+    }
+
     private Properties detectSchXslt(Properties properties) throws MojoExecutionException {
         Map<String, Artifact> arficactMap = this.pluginDescriptor.getArtifactMap();
         if (arficactMap.containsKey("name.dmaus.schxslt:schxslt")) {
@@ -236,6 +249,11 @@ public class XSpecMojo extends AbstractMojo {
             File schxsltPackageFile =  schxsltArtifact.getFile();
 
             properties.setProperty(SCHXSLT_PACKAGE, schxsltPackageFile.getAbsolutePath());
+
+            File schxsltRoot = new File(properties.getProperty(SCHXSLT_ROOT));
+
+            addSchXsltToXspecProperties(new File(schxsltRoot, "xslt/2.0"));
+
         }
 
 
