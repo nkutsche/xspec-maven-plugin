@@ -11,6 +11,13 @@
     
     <description>This project provides an alternative Maven Plugin to execute XSpec scripts. This plugin is just a Maven Plugin wrapper to execute the native XSpec framework by an internal ANT process. Use this plugin only if the main plugin (https://github.com/xspec/xspec-maven-plugin-1) does not cover your needs.</description>
     
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>LICENSE</url>
+        </license>
+    </licenses>
+    
     <developers>
         <developer>
             <id>nkutsche</id>
