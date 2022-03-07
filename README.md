@@ -9,6 +9,7 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 * Update of used XSpec framework to v1.6.0 - and use it as fallback only.
 * Added the possibility to use newer XSpec framework versions (2.0.7+).
 * Detects XSpec test type (xslt, schematron, xquery) automatically per each XSpec file.
+* Adds possibility to [integrate SchXslt as Schematron compiler](#schxslt-integration-as-schematron-compiler). 
 * Configuration extensions:
     * Added possibility to specify properties for the XSpec Ant call (`<xspecProperties>`).
     * Added project runtime classpath as `xspec.additional.classpath` (`<addDependenciesToClasspath>`)
@@ -72,6 +73,19 @@ By default this plugin uses XSpec 1.6.0. To use a newer version you can add it a
 
 Please make sure you use the classifier `enduser-files` and as type `zip`! Supported are XSpec v2.0.7+. 
 
+### SchXslt Integration as Schematron Compiler
+
+To integrate the [schXslt](https://github.com/schxslt/schxslt) as Schematron compiler add it as plugin dependency:
+
+```xml
+<dependency>
+    <groupId>name.dmaus.schxslt</groupId>
+    <artifactId>schxslt</artifactId>
+    <version>{schxslt.version}</version>
+</dependency>
+```
+
+Tested with XSpec `v2.2.4` and SchXslt `v1.5.2` and `v1.8.6`.
 
 ### Plugin configuration
 
