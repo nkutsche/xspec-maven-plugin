@@ -121,12 +121,12 @@
 
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>releases/v@{project.version}</tagNameFormat>
-                    <preparationGoals>clean deploy -P release</preparationGoals>
-                    <completionGoals>process-resources clean</completionGoals>
+                    <scmReleaseCommitComment>@{prefix} Release version as @{releaseLabel}.</scmReleaseCommitComment>
+                    <arguments>-P release</arguments>
                 </configuration>
             </plugin>
             
@@ -142,8 +142,6 @@
                     <plugin>
                         <artifactId>maven-scm-plugin</artifactId>
                         <configuration>
-                            <message>[maven-release-plugin] Release version ${project.version}</message>
-                            <includes>pom.xml,README.md,bin/releases/**</includes>
                             <pushChanges>false</pushChanges>
                         </configuration>
                         <executions>
@@ -152,7 +150,6 @@
                                 <goals>
                                     <goal>checkin</goal>
                                 </goals>
-                                <phase>deploy</phase>
                             </execution>
                         </executions>
                     </plugin>
