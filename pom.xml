@@ -32,8 +32,8 @@
         <connection>scm:git:https://github.com/nkutsche/xspec-maven-plugin.git</connection>
         <url>https://github.com/nkutsche/xspec-maven-plugin</url>
         <developerConnection>scm:git:https://github.com/nkutsche/xspec-maven-plugin.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -118,7 +118,7 @@
                     </mojoDependencies>
                 </configuration>
             </plugin>
-
+            
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0-M1</version>
