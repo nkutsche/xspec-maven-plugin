@@ -139,20 +139,6 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-scm-plugin</artifactId>
-                        <configuration>
-                            <pushChanges>false</pushChanges>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>default</id>
-                                <goals>
-                                    <goal>checkin</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                     
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
