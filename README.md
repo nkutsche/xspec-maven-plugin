@@ -14,6 +14,7 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
     * Added possibility to specify properties for the XSpec Ant call (`<xspecProperties>`).
     * Added project runtime classpath as `xspec.additional.classpath` (`<addDependenciesToClasspath>`)
     * Removed `<testType>` as it is detected now directly from the XSpec file.
+* Publish on Maven Central.
 * Handling of catalog fixed.
 
 ### 1.0.1
@@ -28,18 +29,7 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Usage
 
-As this is not published on Maven Central, you have do add this project as plugin repository to your `pom.xml`:
-
-```xml
-<pluginRepositories>
-    <pluginRepository>
-        <id>com.nkutsche</id>
-        <url>https://raw.github.com/nkutsche/xspec-maven-plugin/master/bin/releases/</url>
-    </pluginRepository>
-</pluginRepositories>
-```
-
-Then you can add this as a minimal configuration:
+You can add the plugin call with a minimal configuration:
 
 ```xml
 <plugin>
@@ -55,6 +45,8 @@ Then you can add this as a minimal configuration:
     </executions>
 </plugin>
 ```
+
+**Note: ** since version v2.0.0 the plugin is on Maven Central. For using older versions, you have to add `https://raw.github.com/nkutsche/xspec-maven-plugin/master/bin/releases/` as `<pluginRepository>` to your POM file.
 
 ### XSpec Version
 
@@ -125,7 +117,7 @@ This is the default configuration:
         <!-- <saxon.custom.options>...</saxon.custom.options> -->
     </xspecProperties>   
     
-<!--  Adds the project and dependency artifacts to the XSpec framework (e.g. to enable extension functions) -->
+<!--  Adds the project and dependency artifacts to the classpath of the internal XSpec Java calls (e.g. to enable extension functions) -->
     <addDependenciesToClasspath>true</addDependenciesToClasspath>    
 </configuration>
 ```
