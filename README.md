@@ -6,6 +6,10 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ### Current Snapshot
 
+* Upgrade dependencies:
+    * Ant 1.10.9 → 1.10.11
+    * Maven Core 3.5.3 → 3.8.1
+
 ### 2.0.0
 
 * Update of used XSpec framework to v1.6.0 - and use it as fallback only.
