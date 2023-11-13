@@ -4,6 +4,8 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
+### Current Snapshot
+
 ### 2.0.0
 
 * Update of used XSpec framework to v1.6.0 - and use it as fallback only.
