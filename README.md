@@ -4,7 +4,7 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
-### Current Snapshot
+### 2.0.1
 
 * Bugfix:
     * Patch for issue [#7](https://github.com/nkutsche/xspec-maven-plugin/issues/7) – handles edge case of mixing XSpec files with different test-type (XSLT/Schematron) but same file name.
