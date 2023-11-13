@@ -8,8 +8,11 @@
         
         <sequential>
             <basename property="in.basename" file="@{in}"/>
+            <tstamp>
+                <format property="xspec.xml-to-properties.suffix" pattern="hhmmssS"/>
+            </tstamp>
             <property name="xspec.xml-to-properties.temp"
-                value="${basedir}/temp/${in.basename}-xml-to-prop.xml" />
+                value="@{tempdir}/${in.basename}-xml-to-prop_${xspec.xml-to-properties.suffix}.xml" />
             
             <xslt in="@{in}"
                 out="${xspec.xml-to-properties.temp}"

@@ -6,6 +6,8 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ### Current Snapshot
 
+* Bugfix:
+    * Patch for issue [#7](https://github.com/nkutsche/xspec-maven-plugin/issues/7) – handles edge case of mixing XSpec files with different test-type (XSLT/Schematron) but same file name.
 * Upgrade dependencies:
     * Ant 1.10.9 → 1.10.11
     * Maven Core 3.5.3 → 3.8.1
