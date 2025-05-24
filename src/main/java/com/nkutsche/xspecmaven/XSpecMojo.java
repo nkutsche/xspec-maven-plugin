@@ -161,7 +161,6 @@ public class XSpecMojo extends AbstractMojo {
             getLog().info("Start nested ANT process...");
             p.executeTarget(p.getDefaultTarget());
         } catch (Exception e) {
-            e.printStackTrace();
             throw new MojoExecutionException("Execution failed because of a fatal error", e);
         }
     }
