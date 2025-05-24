@@ -28,7 +28,9 @@
     
     <property name="xspec.properties" value="${working.dir}/xspec.properties"/>
 
-
+    <condition property="xspec.force.focus" value="#NONE" else="">
+        <equals arg1="${ignore.focus}" arg2="true"/>
+    </condition>
 
     <path id="xspec.file.list">
         <fileset dir="${test.dir}" includes="${includes}" excludes="${excludes}" erroronmissingdir="false"/>
@@ -110,6 +112,7 @@
             <property name="generateSurefireReport" value="${generateSurefireReport}"/>
             <property name="surefireReportDir" value="${surefireReportDir}"/>
             <property name="xspec.properties" value="${xspec.properties}"/>
+            <property name="xspec.force.focus" value="${xspec.force.focus}"/>
         </ant>
         
 
