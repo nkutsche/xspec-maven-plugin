@@ -1,4 +1,4 @@
-# Maven Plugin for XSpec
+﻿# Maven Plugin for XSpec
 
 This project provides an alternative Maven Plugin to execute XSpec scripts. This plugin is just a Maven Plugin wrapper to execute the native XSpec framework by an internal ANT process. **Note:** Use this plugin only if the [main plugin](https://github.com/xspec/xspec-maven-plugin-1) does not cover your needs.
 
@@ -10,6 +10,8 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
   * By default the `focus` attributes of the executed XSpecs are ignored
   * Introduced the configuration parameter `<ignoreFocus>` to control this behavior with `true|false`
   * The Maven property `-Dxspecmaven.ignoreFocus` will set this config parameter from commandline.
+* Bugfix:
+  * Do not print the stack trace in case of XSpec test failures [#9](https://github.com/nkutsche/xspec-maven-plugin/issues/7)
 
 ### 2.0.1
 
