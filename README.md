@@ -6,6 +6,10 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ### Current Snapshot
 
+* Implements issue [#10](https://github.com/nkutsche/xspec-maven-plugin/issues/10):
+  * The process is no more terminated by the first XSpec script with a test failure.
+  * A summary report is generated to give an overview over all executed XSpec scripts and their result reports.
+  * The CSS of the single reports is switched to the classic theme. 
 * Implements issue [#8](https://github.com/nkutsche/xspec-maven-plugin/issues/8):
   * By default the `focus` attributes of the executed XSpecs are ignored
   * Introduced the configuration parameter `<ignoreFocus>` to control this behavior with `true|false`

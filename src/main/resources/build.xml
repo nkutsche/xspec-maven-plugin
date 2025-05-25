@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="execute xspec" default="main">
 
     <property name="working.dir" value="${basedir}"/>
@@ -82,9 +82,30 @@
         <echo message="Search for XSpec files in ${test.dir} (${test.dir.xspec.amount} XSpec files found)" level="info"/>
         <echo message="Includes: ${includes}" level="debug"/>
         <echo message="Excludes: ${excludes}" level="debug"/>
+        
+        <if>
+            <available file="${temp.dir}/failures.txt"/>
+            <then>
+                <delete file="${temp.dir}/failures.txt" failonerror="false" quiet="true"/>
+            </then>
+        </if>
+        
         <foreach target="test" param="xspec.file">
             <path refid="xspec.file.list"/>
         </foreach>
+        
+        <xslt in="${basedir}/build.xml"
+            style="${basedir}/generate-summary.xsl"
+            out="${report.dir}/index.html"
+            />
+        
+        <if>
+            <available file="${temp.dir}/failures.txt"/>
+            <then>
+                <fail>XSpec tests failed. See ${report.dir}/index.html for a report.</fail>
+            </then>
+        </if>
+        
     </target>
     
     <target name="test">
@@ -102,18 +123,26 @@
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         
+        <trycatch>
+            <try>
+                <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
+                    <property name="xspec.framework" value="${xspec.framework}"/>
+                    <property name="xspec.file" value="${xspec.file}"/>
+                    <property name="report.dir" value="${report.dir}"/>
+                    <property name="xspec.file.basename" value="${xspec.file.basename}"/>
+                    <property name="temp.dir" value="${temp.dir}"/>
+                    <property name="generateSurefireReport" value="${generateSurefireReport}"/>
+                    <property name="surefireReportDir" value="${surefireReportDir}"/>
+                    <property name="xspec.properties" value="${xspec.properties}"/>
+            		<property name="xspec.force.focus" value="${xspec.force.focus}"/>
+                </ant>
+            </try>
+            <catch>
+                <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
+            </catch>
+        </trycatch>
         
-        <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
-            <property name="xspec.framework" value="${xspec.framework}"/>
-            <property name="xspec.file" value="${xspec.file}"/>
-            <property name="report.dir" value="${report.dir}"/>
-            <property name="xspec.file.basename" value="${xspec.file.basename}"/>
-            <property name="temp.dir" value="${temp.dir}"/>
-            <property name="generateSurefireReport" value="${generateSurefireReport}"/>
-            <property name="surefireReportDir" value="${surefireReportDir}"/>
-            <property name="xspec.properties" value="${xspec.properties}"/>
-            <property name="xspec.force.focus" value="${xspec.force.focus}"/>
-        </ant>
+        
         
 
         <echo message="" level="info"/>

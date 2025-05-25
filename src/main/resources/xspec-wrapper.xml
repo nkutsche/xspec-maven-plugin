@@ -35,6 +35,7 @@
             <property name="xspec.output.dir" location="${temp.dir}"/>
             <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
             <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
+            <property name="xspec.html.report.theme" value="classic"/>
             <property file="${xspec.properties}"/>
             <property name="xspec.force.focus" value="${xspec.force.focus}"/>
         </ant>
