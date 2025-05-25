@@ -4,7 +4,7 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
-### Current Snapshot
+### 2.1.0
 
 * Implements issue [#10](https://github.com/nkutsche/xspec-maven-plugin/issues/10):
   * The process is no more terminated by the first XSpec script with a test failure.
@@ -16,6 +16,8 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
   * The Maven property `-Dxspecmaven.ignoreFocus` will set this config parameter from commandline.
 * Bugfix:
   * Do not print the stack trace in case of XSpec test failures [#9](https://github.com/nkutsche/xspec-maven-plugin/issues/7)
+* Upgrade dependencies:
+    * Commons-IO 2.7 → 2.14.0
 
 ### 2.0.1
 
