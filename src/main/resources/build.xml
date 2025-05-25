@@ -14,6 +14,8 @@
     <property name="test.dir" value="${project.dir}/src/test/xspec/schematron"/>
 
     <property name="test.type" value="s"/>
+    
+    <property name="fail.fast" value="false"/>
 
     <property name="report.dir" value="${build.dir}/xspec-reports"/>
 
@@ -123,7 +125,7 @@
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         
-        <trycatch>
+        <trycatch property="xspec.fail.message">
             <try>
                 <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
                     <property name="xspec.framework" value="${xspec.framework}"/>
@@ -138,7 +140,15 @@
                 </ant>
             </try>
             <catch>
-                <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
+                <if>
+                    <istrue value="${fail.fast}"/>
+                    <then>
+                        <fail>${xspec.fail.message}</fail>
+                    </then>
+                    <else>
+                        <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
+                    </else>
+                </if>
             </catch>
         </trycatch>
         
