@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="execute xspec" default="main">
 
     <property name="working.dir" value="${basedir}"/>
@@ -102,18 +102,25 @@
         <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         
+        <trycatch>
+            <try>
+                <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
+                    <property name="xspec.framework" value="${xspec.framework}"/>
+                    <property name="xspec.file" value="${xspec.file}"/>
+                    <property name="report.dir" value="${report.dir}"/>
+                    <property name="xspec.file.basename" value="${xspec.file.basename}"/>
+                    <property name="temp.dir" value="${temp.dir}"/>
+                    <property name="generateSurefireReport" value="${generateSurefireReport}"/>
+                    <property name="surefireReportDir" value="${surefireReportDir}"/>
+                    <property name="xspec.properties" value="${xspec.properties}"/>
+            		<property name="xspec.force.focus" value="${xspec.force.focus}"/>
+                </ant>
+            </try>
+            <catch>
+            </catch>
+        </trycatch>
         
-        <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
-            <property name="xspec.framework" value="${xspec.framework}"/>
-            <property name="xspec.file" value="${xspec.file}"/>
-            <property name="report.dir" value="${report.dir}"/>
-            <property name="xspec.file.basename" value="${xspec.file.basename}"/>
-            <property name="temp.dir" value="${temp.dir}"/>
-            <property name="generateSurefireReport" value="${generateSurefireReport}"/>
-            <property name="surefireReportDir" value="${surefireReportDir}"/>
-            <property name="xspec.properties" value="${xspec.properties}"/>
-            <property name="xspec.force.focus" value="${xspec.force.focus}"/>
-        </ant>
+        
         
 
         <echo message="" level="info"/>
