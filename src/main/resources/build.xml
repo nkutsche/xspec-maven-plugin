@@ -82,6 +82,14 @@
         <echo message="Search for XSpec files in ${test.dir} (${test.dir.xspec.amount} XSpec files found)" level="info"/>
         <echo message="Includes: ${includes}" level="debug"/>
         <echo message="Excludes: ${excludes}" level="debug"/>
+        
+        <if>
+            <available file="${temp.dir}/failures.txt"/>
+            <then>
+                <delete file="${temp.dir}/failures.txt" failonerror="false" quiet="true"/>
+            </then>
+        </if>
+        
         <foreach target="test" param="xspec.file">
             <path refid="xspec.file.list"/>
         </foreach>
@@ -90,6 +98,13 @@
             style="${basedir}/generate-summary.xsl"
             out="${report.dir}/index.html"
             />
+        
+        <if>
+            <available file="${temp.dir}/failures.txt"/>
+            <then>
+                <fail>XSpec tests failed. See ${report.dir}/index.html for a report.</fail>
+            </then>
+        </if>
         
     </target>
     
@@ -123,6 +138,7 @@
                 </ant>
             </try>
             <catch>
+                <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
             </catch>
         </trycatch>
         
