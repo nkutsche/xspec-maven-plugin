@@ -80,6 +80,9 @@ public class XSpecMojo extends AbstractMojo {
     @Parameter(defaultValue = "true", property = "xspecmaven.ignoreFocus")
     public Boolean ignoreFocus;
 
+    @Parameter(defaultValue = "false", property = "xspecmaven.failFast")
+    public Boolean failFast;
+
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -340,6 +343,7 @@ public class XSpecMojo extends AbstractMojo {
         properties.setProperty(XSPEC_PROPERTIES, new File(workingDir, "xspec.properties").getAbsolutePath());
 
         properties.setProperty(IGNORE_FOCUS, this.ignoreFocus.toString());
+        properties.setProperty(FAIL_FAST, this.failFast.toString());
 
         if(xspecTempDir == null){
             xspecTempDir = new File(workingDir, "xspec-temp-files");
