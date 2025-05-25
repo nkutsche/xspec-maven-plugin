@@ -11,6 +11,7 @@ public interface AntProperties {
     //    Configuration
     String TEST_TYPE = "test.type";
     String XSPEC_PROPERTIES = "xspec.properties";
+    String IGNORE_FOCUS = "ignore.focus";
 
     //    PROCESS FILES
     String ANT_FILE = "ant.file";

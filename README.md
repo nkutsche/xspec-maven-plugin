@@ -4,6 +4,13 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
+### Current Snapshot
+
+* Implements issue [#8](https://github.com/nkutsche/xspec-maven-plugin/issues/8):
+  * By default the `focus` attributes of the executed XSpecs are ignored
+  * Introduced the configuration parameter `<ignoreFocus>` to control this behavior with `true|false`
+  * The Maven property `-Dxspecmaven.ignoreFocus` will set this config parameter from commandline.
+
 ### 2.0.1
 
 * Bugfix:
@@ -126,7 +133,13 @@ This is the default configuration:
     </xspecProperties>   
     
 <!--  Adds the project and dependency artifacts to the classpath of the internal XSpec Java calls (e.g. to enable extension functions) -->
-    <addDependenciesToClasspath>true</addDependenciesToClasspath>    
+    <addDependenciesToClasspath>true</addDependenciesToClasspath>
+
+  <!--  If true the focus attributes of the executed XSpec scripts are ignored. Only in case of false, they are respected.
+    You can overwrite this also by the Maven property -Dxspecmaven.ignoreFocus=false
+  -->
+  <ignoreFocus>true</ignoreFocus>
+  
 </configuration>
 ```
 
