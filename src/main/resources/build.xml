@@ -85,6 +85,12 @@
         <foreach target="test" param="xspec.file">
             <path refid="xspec.file.list"/>
         </foreach>
+        
+        <xslt in="${basedir}/build.xml"
+            style="${basedir}/generate-summary.xsl"
+            out="${report.dir}/index.html"
+            />
+        
     </target>
     
     <target name="test">
