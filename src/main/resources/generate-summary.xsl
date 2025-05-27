@@ -32,7 +32,8 @@
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <title>Summary Report of XSpec Maven plugin (passed: 1 / pending: 2 / failed: 0 / total: 3)</title>
+                <title xsl:expand-text="yes"
+                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / total: {$sum_total})</title>
                 <style type="text/css">
                     .emphasis {
                         font-weight: bold !important;
