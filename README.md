@@ -4,6 +4,11 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
+### Current Snapshot
+
+* Bugfix:
+    * Patch for issue [#12](https://github.com/nkutsche/xspec-maven-plugin/issues/12) - nested scenarios are now detected for the summary report. 
+
 ### 2.1.0
 
 * Implements issue [#10](https://github.com/nkutsche/xspec-maven-plugin/issues/10):
