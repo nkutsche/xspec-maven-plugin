@@ -8,10 +8,32 @@
     <xsl:param name="tempdir" select="resolve-uri('xspec-temp-files/')"/>
     <xsl:template match="/">
         <xsl:variable name="collection" select="collection($tempdir || '?select=*-result.xml')"/>
+        <xsl:variable name="single-reports" as="element()*">
+            <xsl:for-each select="$collection/x:report">
+                <xsl:variable name="name" select="@xspec/tokenize(., '/')[last()]"/>
+                <xsl:variable name="tests" select=".//x:scenario/x:test"/>
+                <xsl:variable name="passed" select="count($tests[@successful = 'true'])"/>
+                <xsl:variable name="failed" select="count($tests[@successful = 'false'])"/>
+                <xsl:variable name="pending" select="count($tests[@pending])"/>
+                <xsl:variable name="total" select="sum(($passed, $failed, $pending))"/>
+                <report name="{$name}"
+                    passed="{$passed}"
+                    failed="{$failed}"
+                    pending="{$pending}"
+                    total="{$total}"
+                    />
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="sum_failures" select="sum($single-reports/@failed)"/>
+        <xsl:variable name="sum_passed" select="sum($single-reports/@passed)"/>
+        <xsl:variable name="sum_pending" select="sum($single-reports/@pending)"/>
+        <xsl:variable name="sum_total" select="sum($single-reports/@total)"/>
+        
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <title>Summary Report of XSpec Maven plugin (passed: 1 / pending: 2 / failed: 0 / total: 3)</title>
+                <title xsl:expand-text="yes"
+                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / total: {$sum_total})</title>
                 <style type="text/css">
                     .emphasis {
                         font-weight: bold !important;
@@ -22,21 +44,6 @@
             <body id="testReport">
                 <h1>Summary XSpec Report</h1>
                 
-                <xsl:variable name="single-reports" as="element()*">
-                    <xsl:for-each select="$collection/x:report">
-                        <xsl:variable name="name" select="@xspec/tokenize(., '/')[last()]"/>
-                        <xsl:variable name="passed" select="count(x:scenario/x:test[@successful = 'true'])"/>
-                        <xsl:variable name="failed" select="count(x:scenario/x:test[@successful = 'false'])"/>
-                        <xsl:variable name="pending" select="count(x:scenario/x:test[@pending])"/>
-                        <xsl:variable name="total" select="sum(($passed, $failed, $pending))"/>
-                        <report name="{$name}"
-                            passed="{$passed}"
-                            failed="{$failed}"
-                            pending="{$pending}"
-                            total="{$total}"
-                            />
-                    </xsl:for-each>
-                </xsl:variable>
                 
                 <table class="xspec">
                     <colgroup>
@@ -49,11 +56,10 @@
                     <thead>
                         <tr xsl:expand-text="yes">
                             <th></th>
-                            <xsl:variable name="sum_failures" select="sum($single-reports/@failed)"/>
-                            <th class="totals">passed: {sum($single-reports/@passed)}</th>
-                            <th class="totals">pending: {sum($single-reports/@pending)}</th>
+                            <th class="totals">passed: {$sum_passed}</th>
+                            <th class="totals">pending: {$sum_pending}</th>
                             <th class="totals {'emphasis'[$sum_failures gt 0]}">failed: {$sum_failures}</th>
-                            <th class="totals">total: {sum($single-reports/@total)}</th>
+                            <th class="totals">total: {$sum_total}</th>
                         </tr>
                     </thead>
                     <tbody>
