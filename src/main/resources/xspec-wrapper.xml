@@ -27,7 +27,7 @@
         
         <echo message="Start XSpec process for ${xspec.file}" level="info"/>
         
-        <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false">
+        <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false" output="${log.file}">
             <property name="xspec.xml" location="${xspec.file}"/>
             <property name="test.type" value="${test.type}"/>
             <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
