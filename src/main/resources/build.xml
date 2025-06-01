@@ -86,9 +86,9 @@
         <echo message="Excludes: ${excludes}" level="debug"/>
         
         <if>
-            <available file="${temp.dir}/failures.txt"/>
+            <available file="${temp.dir}"/>
             <then>
-                <delete file="${temp.dir}/failures.txt" failonerror="false" quiet="true"/>
+                <delete dir="${temp.dir}" quiet="true" failonerror="false"/>
             </then>
         </if>
         
@@ -137,6 +137,7 @@
                     <property name="surefireReportDir" value="${surefireReportDir}"/>
                     <property name="xspec.properties" value="${xspec.properties}"/>
             		<property name="xspec.force.focus" value="${xspec.force.focus}"/>
+                    <property name="log.file" value="${temp.dir}/${xspec.file.basename}-xspec.log"/>
                 </ant>
             </try>
             <catch>
@@ -146,12 +147,29 @@
                         <fail>${xspec.fail.message}</fail>
                     </then>
                     <else>
-                        <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
+                        <makeurl property="xspec.url" file="${xspec.file}"/>
+                        <makeurl property="css.href" file="${basedir}/xspec-report-theme-classic.css"/>
+                        <echo message=";${xspec.url}" file="${temp.dir}/failures.txt" append="true"/>
+                        
+                        <loadfile property="xspec.result.log" srcFile="${temp.dir}/${xspec.file.basename}-xspec.log"
+                            failonerror="false"/>
+                        
+                        <condition property="error.message" value="${xspec.result.log}" else="${xspec.fail.message}">
+                            <available file="${temp.dir}/${xspec.file.basename}-xspec.log"/>
+                        </condition>
+                        
+                        <copy file="${basedir}/exec-error-report.html"
+                            tofile="${report.dir}/${xspec.file.basename}-result.html">
+                            <filterset>
+                                <filter token="title" value="${xspec.file}"/>
+                                <filter token="css.href" value="${css.href}"/>
+                                <filter token="error.message" value="${error.message}"/>
+                            </filterset>
+                        </copy>
                     </else>
                 </if>
             </catch>
         </trycatch>
-        
         
         
 

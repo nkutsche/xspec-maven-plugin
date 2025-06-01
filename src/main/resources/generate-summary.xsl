@@ -7,7 +7,7 @@
     version="3.0">
     <xsl:param name="tempdir" select="resolve-uri('xspec-temp-files/')"/>
     <xsl:template match="/">
-        <xsl:variable name="collection" select="collection($tempdir || '?select=*-result.xml')"/>
+        <xsl:variable name="collection" select="collection($tempdir || '?select=*-result.xml;on-error=ignore')"/>
         <xsl:variable name="single-reports" as="element()*">
             <xsl:for-each select="$collection/x:report">
                 <xsl:variable name="name" select="@xspec/tokenize(., '/')[last()]"/>
@@ -16,24 +16,70 @@
                 <xsl:variable name="failed" select="count($tests[@successful = 'false'])"/>
                 <xsl:variable name="pending" select="count($tests[@pending])"/>
                 <xsl:variable name="total" select="sum(($passed, $failed, $pending))"/>
-                <report name="{$name}"
+                <report xspec="{@xspec}" 
+                    name="{$name}"
                     passed="{$passed}"
                     failed="{$failed}"
                     pending="{$pending}"
+                    errors="0"
                     total="{$total}"
                     />
             </xsl:for-each>
         </xsl:variable>
+        <xsl:variable name="failure-file" select="resolve-uri('failures.txt', $tempdir)"/>
+        <xsl:variable name="failure-xspecs" select="
+            if (unparsed-text-available($failure-file)) 
+            then unparsed-text($failure-file) => tokenize(';') 
+            else ()
+            "/>
+        <xsl:variable name="failure-xspecs" select="$failure-xspecs ! normalize-space(.) ! replace(., '\s|\n|\r', '')[. != '']"/>
+        
+        <xsl:variable name="error-xspecs" select="$failure-xspecs[not(. = $single-reports/@xspec/normalize-space(.))]"/>
+        <xsl:variable name="error-reports" as="element()*">
+            <xsl:for-each select="$error-xspecs">
+                <xsl:variable name="name" select="tokenize(., '/')[last()]"/>
+                <xsl:variable name="xspec" select="doc(.)"/>
+                <xsl:variable name="scenarios" select="$xspec//x:scenario"/>
+                <xsl:variable name="tests" select="
+                    $scenarios/(x:expect | x:*[local-name() => starts-with('expect-')])
+                    "/>
+                
+                <xsl:variable name="pending-scenarios" select="$xspec//x:scenario[@pending]//*"/>
+                <xsl:variable name="pending-scenarios" select="$xspec//x:pending//x:scenario"/>
+                <xsl:variable name="pending-tests" select="
+                    $pending-scenarios/(x:expect | x:*[local-name() => starts-with('expect-')])
+                    | $tests[@pending]
+                    "/>
+                
+                <xsl:variable name="tests" select="$tests except $pending-tests"/>
+                
+                <xsl:variable name="test-count" select="count($tests)"/>
+                <xsl:variable name="pending-count" select="count($pending-tests)"/>
+                <report xpsec="{.}" 
+                    name="{$name}"
+                    passed="0"
+                    failed="0"
+                    pending="{$pending-count}"
+                    errors="{$test-count}"
+                    total="{$test-count + $pending-count}"
+                />
+            </xsl:for-each>
+        </xsl:variable>
+        
+        <xsl:variable name="single-reports" as="element()*" select="$single-reports, $error-reports"/>
+        
+        
         <xsl:variable name="sum_failures" select="sum($single-reports/@failed)"/>
         <xsl:variable name="sum_passed" select="sum($single-reports/@passed)"/>
         <xsl:variable name="sum_pending" select="sum($single-reports/@pending)"/>
+        <xsl:variable name="sum_errors" select="sum($single-reports/@errors)"/>
         <xsl:variable name="sum_total" select="sum($single-reports/@total)"/>
         
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <title xsl:expand-text="yes"
-                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / total: {$sum_total})</title>
+                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / errors: {$sum_errors} / total: {$sum_total})</title>
                 <style type="text/css">
                     .emphasis {
                         font-weight: bold !important;
@@ -47,11 +93,12 @@
                 
                 <table class="xspec">
                     <colgroup>
-                        <col style="width:75%" />
-                        <col style="width:6.25%" />
-                        <col style="width:6.25%" />
-                        <col style="width:6.25%" />
-                        <col style="width:6.25%" />
+                        <col style="width:70%" />
+                        <col style="width:6%" />
+                        <col style="width:6%" />
+                        <col style="width:6%" />
+                        <col style="width:6%" />
+                        <col style="width:6%" />
                     </colgroup>
                     <thead>
                         <tr xsl:expand-text="yes">
@@ -59,6 +106,7 @@
                             <th class="totals">passed: {$sum_passed}</th>
                             <th class="totals">pending: {$sum_pending}</th>
                             <th class="totals {'emphasis'[$sum_failures gt 0]}">failed: {$sum_failures}</th>
+                            <th class="totals {'emphasis'[$sum_errors gt 0]}">errors: {$sum_errors}</th>
                             <th class="totals">total: {$sum_total}</th>
                         </tr>
                     </thead>
@@ -67,6 +115,8 @@
                             <tr class="{
                                 if (@failed > 0) 
                                 then 'failed' 
+                                else if (@errors > 0) 
+                                then 'errors' 
                                 else if (@passed = 0) 
                                 then 'pending' 
                                 else 'successful'
@@ -80,6 +130,8 @@
                                 <th class="totals">{@pending}</th>
                                 <xsl:variable name="failed" select="@failed"/>
                                 <th class="totals {'emphasis'[$failed > 0]}">{$failed}</th>
+                                <xsl:variable name="errors" select="@errors"/>
+                                <th class="totals {'emphasis'[$errors > 0]}">{$errors}</th>
                                 <th class="totals">{@total}</th>
                             </tr>
                         </xsl:for-each>
