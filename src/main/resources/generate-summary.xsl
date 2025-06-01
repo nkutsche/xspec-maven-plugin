@@ -21,7 +21,7 @@
                     passed="{$passed}"
                     failed="{$failed}"
                     pending="{$pending}"
-                    missing="0"
+                    errors="0"
                     total="{$total}"
                     />
             </xsl:for-each>
@@ -34,9 +34,9 @@
             "/>
         <xsl:variable name="failure-xspecs" select="$failure-xspecs ! normalize-space(.) ! replace(., '\s|\n|\r', '')[. != '']"/>
         
-        <xsl:variable name="missing-xspecs" select="$failure-xspecs[not(. = $single-reports/@xspec/normalize-space(.))]"/>
-        <xsl:variable name="missing-reports" as="element()*">
-            <xsl:for-each select="$missing-xspecs">
+        <xsl:variable name="error-xspecs" select="$failure-xspecs[not(. = $single-reports/@xspec/normalize-space(.))]"/>
+        <xsl:variable name="error-reports" as="element()*">
+            <xsl:for-each select="$error-xspecs">
                 <xsl:variable name="name" select="tokenize(., '/')[last()]"/>
                 <xsl:variable name="xspec" select="doc(.)"/>
                 <xsl:variable name="scenarios" select="$xspec//x:scenario"/>
@@ -60,26 +60,26 @@
                     passed="0"
                     failed="0"
                     pending="{$pending-count}"
-                    missing="{$test-count}"
+                    errors="{$test-count}"
                     total="{$test-count + $pending-count}"
                 />
             </xsl:for-each>
         </xsl:variable>
         
-        <xsl:variable name="single-reports" as="element()*" select="$single-reports, $missing-reports"/>
+        <xsl:variable name="single-reports" as="element()*" select="$single-reports, $error-reports"/>
         
         
         <xsl:variable name="sum_failures" select="sum($single-reports/@failed)"/>
         <xsl:variable name="sum_passed" select="sum($single-reports/@passed)"/>
         <xsl:variable name="sum_pending" select="sum($single-reports/@pending)"/>
-        <xsl:variable name="sum_missing" select="sum($single-reports/@missing)"/>
+        <xsl:variable name="sum_errors" select="sum($single-reports/@errors)"/>
         <xsl:variable name="sum_total" select="sum($single-reports/@total)"/>
         
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <title xsl:expand-text="yes"
-                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / missing: {$sum_missing} / total: {$sum_total})</title>
+                    >Summary Report of XSpec Maven plugin (passed: {$sum_passed} / pending: {$sum_pending} / failed: {$sum_failures} / errors: {$sum_errors} / total: {$sum_total})</title>
                 <style type="text/css">
                     .emphasis {
                         font-weight: bold !important;
@@ -106,7 +106,7 @@
                             <th class="totals">passed: {$sum_passed}</th>
                             <th class="totals">pending: {$sum_pending}</th>
                             <th class="totals {'emphasis'[$sum_failures gt 0]}">failed: {$sum_failures}</th>
-                            <th class="totals {'emphasis'[$sum_missing gt 0]}">missing: {$sum_missing}</th>
+                            <th class="totals {'emphasis'[$sum_errors gt 0]}">errors: {$sum_errors}</th>
                             <th class="totals">total: {$sum_total}</th>
                         </tr>
                     </thead>
@@ -115,8 +115,8 @@
                             <tr class="{
                                 if (@failed > 0) 
                                 then 'failed' 
-                                else if (@missing > 0) 
-                                then 'missing' 
+                                else if (@errors > 0) 
+                                then 'errors' 
                                 else if (@passed = 0) 
                                 then 'pending' 
                                 else 'successful'
@@ -130,8 +130,8 @@
                                 <th class="totals">{@pending}</th>
                                 <xsl:variable name="failed" select="@failed"/>
                                 <th class="totals {'emphasis'[$failed > 0]}">{$failed}</th>
-                                <xsl:variable name="missing" select="@missing"/>
-                                <th class="totals {'emphasis'[$missing > 0]}">{$missing}</th>
+                                <xsl:variable name="errors" select="@errors"/>
+                                <th class="totals {'emphasis'[$errors > 0]}">{$errors}</th>
                                 <th class="totals">{@total}</th>
                             </tr>
                         </xsl:for-each>
