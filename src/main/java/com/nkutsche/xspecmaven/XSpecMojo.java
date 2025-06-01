@@ -372,6 +372,7 @@ public class XSpecMojo extends AbstractMojo {
         getLog().debug("Created temp folder successfully!");
 
         extractResources("/build.xml", new File(properties.getProperty(ANT_FILE)));
+        extractResources("/exec-error-report.html", new File(workingDir, "exec-error-report.html"));
         extractResources("/xspec-wrapper.xml", new File(workingDir, "xspec-wrapper.xml"));
         extractResources("/test-type.xsl", new File(workingDir, "test-type.xsl"));
         extractResources("/generate-summary.xsl", new File(workingDir, "generate-summary.xsl"));
