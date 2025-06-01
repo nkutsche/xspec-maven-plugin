@@ -147,8 +147,9 @@
                         <fail>${xspec.fail.message}</fail>
                     </then>
                     <else>
-                        <echo message="${xspec.file}" file="${temp.dir}/failures.txt" append="true"/>
+                        <makeurl property="xspec.url" file="${xspec.file}"/>
                         <makeurl property="css.href" file="${basedir}/xspec-report-theme-classic.css"/>
+                        <echo message=";${xspec.url}" file="${temp.dir}/failures.txt" append="true"/>
                         
                         <loadfile property="xspec.result.log" srcFile="${temp.dir}/${xspec.file.basename}-xspec.log"
                             failonerror="false"/>
