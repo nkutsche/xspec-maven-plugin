@@ -86,9 +86,9 @@
         <echo message="Excludes: ${excludes}" level="debug"/>
         
         <if>
-            <available file="${temp.dir}/failures.txt"/>
+            <available file="${temp.dir}"/>
             <then>
-                <delete file="${temp.dir}/failures.txt" failonerror="false" quiet="true"/>
+                <delete dir="${temp.dir}" quiet="true" failonerror="false"/>
             </then>
         </if>
         
@@ -170,7 +170,6 @@
                 </if>
             </catch>
         </trycatch>
-        
         
         
 
