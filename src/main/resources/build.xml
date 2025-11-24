@@ -47,7 +47,8 @@
             <pathelement location="${build.dir}/dependency/ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-
+    
+    <taskdef resource="com/nkutsche/xspecmaven/antlib.xml"/>
     
     <target name="unzip.schxslt" if="schxslt.package">
         <echo message="Unzip ${schxslt.package} to ${schxslt.root}/"/>
