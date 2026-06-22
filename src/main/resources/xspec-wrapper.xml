@@ -8,11 +8,8 @@
         
         <sequential>
             <basename property="in.basename" file="@{in}"/>
-            <tstamp>
-                <format property="xspec.xml-to-properties.suffix" pattern="hhmmssS"/>
-            </tstamp>
             <property name="xspec.xml-to-properties.temp"
-                value="@{tempdir}/${in.basename}-xml-to-prop_${xspec.xml-to-properties.suffix}.xml" />
+                value="@{tempdir}/${in.basename}-xml-to-prop.xml" />
             
             <xslt in="@{in}"
                 out="${xspec.xml-to-properties.temp}"
@@ -23,23 +20,41 @@
     </macrodef>
     
     <target name="xspec-wrapper">
-        <xml-to-properties in="${xspec.file}" style="test-type.xsl" tempdir="${temp.dir}" />
+        <tstamp>
+            <format property="timestamp" pattern="hhmmssS"/>
+        </tstamp>
+        
+        <property name="work.dir" value="${temp.dir}/${timestamp}"/>
+        <property name="report.file" value="${xspec.file.basename}-result.html"/>
+        <mkdir dir="${work.dir}"/>        
+        <mkdir dir="${report.dir}"/>        
+        
+        <xml-to-properties in="${xspec.file}" style="test-type.xsl" tempdir="${work.dir}" />
         
         <echo message="Start XSpec process for ${xspec.file}" level="info"/>
+        
+        
+        <echo message=" " file="${report.dir}/${report.file}"/>
+        
+        <makeurl property="report.file.url" file="${report.dir}/${report.file}"/>
+        <makeurl property="report.dir.url" file="${report.dir}"/>
+        <makeurl property="xspec.file.url" file="${xspec.file}"/>
+
+        <echoproperties format="xml" destfile="${work.dir}/xspec.execution.properties.xml"/>
+        
         
         <ant antfile="${xspec.framework}/build.xml" target="xspec" inheritall="false" output="${log.file}">
             <property name="xspec.xml" location="${xspec.file}"/>
             <property name="test.type" value="${test.type}"/>
-            <property name="xspec.result.html" location="${report.dir}/${xspec.file.basename}-result.html"/>
+            <property name="xspec.result.html" location="${report.dir}/${report.file}"/>
             <property name="xspec.dir" location="${temp.dir}"/>
-            <property name="xspec.output.dir" location="${temp.dir}"/>
+            <property name="xspec.output.dir" location="${work.dir}"/>
             <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
             <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
             <property name="xspec.html.report.theme" value="classic"/>
             <property file="${xspec.properties}"/>
             <property name="xspec.force.focus" value="${xspec.force.focus}"/>
         </ant>
-        
     </target>
   
 </project>
