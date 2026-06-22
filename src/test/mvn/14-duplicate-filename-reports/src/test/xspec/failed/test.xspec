@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../xsl/runner.xsl"
+    >
+    <x:scenario label="failing test">
+        <x:call template="test-it">
+            <x:param name="name" select="'foo'"/>
+        </x:call>
+        <x:expect label="unexpected result is">
+            <bar/>
+        </x:expect>
+    </x:scenario>
+</x:description>
