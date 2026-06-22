@@ -97,10 +97,14 @@
             <path refid="xspec.file.list"/>
         </foreach>
         
+        <makeurl property="temp.dir.url" file="${temp.dir}"/>
+        
         <xslt in="${basedir}/build.xml"
             style="${basedir}/generate-summary.xsl"
             out="${report.dir}/index.html"
-            />
+            >
+            <param name="tempdir" expression="${temp.dir.url}"/>
+        </xslt>
         
         <if>
             <available file="${temp.dir}/failures.txt"/>
