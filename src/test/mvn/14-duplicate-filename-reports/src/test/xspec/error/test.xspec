@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../xsl/runner.xsl"
+    >
+    <x:scenario label="failing test">
+        <x:call template="test-it">
+            <x:param name="name" select="'00_foo'"/>
+        </x:call>
+        <x:expect label="an error is expected, as element name must not start with a number">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+</x:description>

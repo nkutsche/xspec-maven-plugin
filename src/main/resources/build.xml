@@ -47,7 +47,8 @@
             <pathelement location="${build.dir}/dependency/ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-
+    
+    <taskdef resource="com/nkutsche/xspecmaven/antlib.xml"/>
     
     <target name="unzip.schxslt" if="schxslt.package">
         <echo message="Unzip ${schxslt.package} to ${schxslt.root}/"/>
@@ -112,7 +113,11 @@
     
     <target name="test">
         <basename property="xspec.file.basename" file="${xspec.file}"/>
-        
+        <relativepath
+            property="xspec.file.relative"
+            from="${test.dir}"
+            to="${xspec.file}"
+        />
         
 
         <echo message="" level="info"/>
@@ -122,16 +127,17 @@
         <echo message="project.dir       = ${project.dir}" level="debug"/>
         <echo message="xspec.framework   = ${xspec.framework}" level="debug"/>
         <echo message="xspec.xml         = ${xspec.file}" level="debug"/>
-        <echo message="xspec.result.html = ${report.dir}/${xspec.file.basename}-result.html" level="debug"/>
+        <echo message="xspec.result.html = ${report.dir}/${xspec.file.relative}-result.html" level="debug"/>
         <echo message="xspec.dir         = ${build.dir}/xspec-temp" level="debug"/>
         
         <trycatch property="xspec.fail.message">
             <try>
-                <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false">
+                <ant antfile="${basedir}/xspec-wrapper.xml" target="xspec-wrapper" inheritall="false"
+                    output="${temp.dir}/${xspec.file.basename}-xspec-stdout.log">
                     <property name="xspec.framework" value="${xspec.framework}"/>
                     <property name="xspec.file" value="${xspec.file}"/>
                     <property name="report.dir" value="${report.dir}"/>
-                    <property name="xspec.file.basename" value="${xspec.file.basename}"/>
+                    <property name="xspec.file.basename" value="${xspec.file.relative}"/>
                     <property name="temp.dir" value="${temp.dir}"/>
                     <property name="generateSurefireReport" value="${generateSurefireReport}"/>
                     <property name="surefireReportDir" value="${surefireReportDir}"/>
@@ -139,6 +145,7 @@
             		<property name="xspec.force.focus" value="${xspec.force.focus}"/>
                     <property name="log.file" value="${temp.dir}/${xspec.file.basename}-xspec.log"/>
                 </ant>
+                <echo>Finalized XSpec process without any errors.</echo>
             </try>
             <catch>
                 <if>
@@ -157,9 +164,8 @@
                         <condition property="error.message" value="${xspec.result.log}" else="${xspec.fail.message}">
                             <available file="${temp.dir}/${xspec.file.basename}-xspec.log"/>
                         </condition>
-                        
                         <copy file="${basedir}/exec-error-report.html"
-                            tofile="${report.dir}/${xspec.file.basename}-result.html">
+                            tofile="${report.dir}/${xspec.file.relative}-result.html" overwrite="true">
                             <filterset>
                                 <filter token="title" value="${xspec.file}"/>
                                 <filter token="css.href" value="${css.href}"/>
