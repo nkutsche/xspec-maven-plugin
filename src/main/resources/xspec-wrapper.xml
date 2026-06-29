@@ -49,6 +49,7 @@
             <property name="xspec.result.html" location="${report.dir}/${report.file}"/>
             <property name="xspec.dir" location="${temp.dir}"/>
             <property name="xspec.output.dir" location="${work.dir}"/>
+            <property name="xspec.result.xml" location="${work.dir}/test-result.xml"/>
             <property name="xspec.junit.enabled" value="${generateSurefireReport}"/>
             <property name="xspec.result.junit" location="${surefireReportDir}/${xspec.file.basename}-junit.xml"/>
             <property name="xspec.html.report.theme" value="classic"/>
