@@ -169,7 +169,7 @@
                             <available file="${temp.dir}/${xspec.file.basename}-xspec.log"/>
                         </condition>
                         <copy file="${basedir}/exec-error-report.html"
-                            tofile="${report.dir}/${xspec.file.relative}-result.html" overwrite="true">
+                            tofile="${report.dir}/${xspec.file.relative}-result-error.html" overwrite="true">
                             <filterset>
                                 <filter token="title" value="${xspec.file}"/>
                                 <filter token="css.href" value="${css.href}"/>

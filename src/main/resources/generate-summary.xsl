@@ -152,6 +152,14 @@
         <xsl:variable name="report.file" select="$properties/key('property-name', 'report.file')/@value"/>
         <xsl:variable name="report.dir.url" select="$properties/key('property-name', 'report.dir.url')/@value"/>
         <xsl:variable name="report.file.url" select="$properties/key('property-name', 'report.file.url')/@value"/>
+        <xsl:variable name="report.error.url" select="replace($report.file.url, '-result\.html$', '-result-error.html')"/>
+        <xsl:variable name="report.file.url" select="
+            if (not(unparsed-text-available($report.file.url))) 
+            then ($report.error.url) 
+            else if (unparsed-text($report.file.url) = ' ') 
+            then ($report.error.url) 
+            else ($report.file.url)
+            "/>
         <xsl:variable name="name" select="$properties/key('property-name', 'xspec.file.basename')/@value"/>
         <xsl:variable name="href" select="substring-after($report.file.url, $report.dir.url)"/>
         <xsl:sequence select="map{
