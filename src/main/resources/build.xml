@@ -149,7 +149,7 @@
             		<property name="xspec.force.focus" value="${xspec.force.focus}"/>
                     <property name="log.file" value="${temp.dir}/${xspec.file.basename}-xspec.log"/>
                 </ant>
-                <echo>Finalized XSpec process without any errors.</echo>
+                <echo level="info">Finalized XSpec process without any errors.</echo>
             </try>
             <catch>
                 <if>
