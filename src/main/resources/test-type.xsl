@@ -21,6 +21,9 @@
                     <xsl:when test="$xspecRoot/@query-at">
                         <xsl:text>q</xsl:text>
                     </xsl:when>
+                    <xsl:when test="$xspecRoot/@xproc">
+                        <xsl:text>p</xsl:text>
+                    </xsl:when>
                     <xsl:otherwise>
                         <xsl:message terminate="yes">
                             <xsl:text>Can not detect the test type of the XSpec file.</xsl:text>
