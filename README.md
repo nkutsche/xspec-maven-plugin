@@ -4,6 +4,14 @@ This project provides an alternative Maven Plugin to execute XSpec scripts. This
 
 ## Release notes
 
+### Current Snapshot (preparing v2.2.0)
+
+* Feature:
+    * Implements XProc support ([#16](https://github.com/nkutsche/xspec-maven-plugin/issues/16)).
+* Bugfixes
+    * Patch for issue [#14](https://github.com/nkutsche/xspec-maven-plugin/issues/14) - handles multiple XSpec files with same name in different directories correctly.
+    * Patch for issue [#15](https://github.com/nkutsche/xspec-maven-plugin/issues/15) - custom temp folder was ignored by the summary report generation.
+
 ### 2.1.1
 
 * Bugfix:
