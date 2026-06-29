@@ -10,7 +10,7 @@
             </x:input>
         </x:call>
         <x:expect label="result" port="result" select="/">
-            <foo/>
+            <bar/>
         </x:expect>
     </x:scenario>
 </x:description>
