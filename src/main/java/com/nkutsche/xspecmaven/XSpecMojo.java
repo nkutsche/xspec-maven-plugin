@@ -176,6 +176,7 @@ public class XSpecMojo extends AbstractMojo {
             String addClasspath = xspecProperties.getProperty("xspec.additional.classpath", "");
             addClasspath = createDependencyClasspath(addClasspath);
             this.xspecProperties.setProperty("xspec.additional.classpath", addClasspath);
+            this.xspecProperties.setProperty("xspec.xmlcalabash.classpath", addClasspath);
         }
 
         if(catalogFile != null) {
