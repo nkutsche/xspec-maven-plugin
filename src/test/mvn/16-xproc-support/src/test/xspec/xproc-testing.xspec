@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:nk="http://www.nkutsche.com/sample"
+    xproc="xproc/sample.xpl"
+    >
+    <x:scenario label="Test sample.xpl">
+        <x:call step="nk:step1">
+            <x:input port="source">
+                <foo/>
+            </x:input>
+        </x:call>
+        <x:expect label="result" port="result" select="/">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+</x:description>
